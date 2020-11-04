@@ -1,3 +1,4 @@
+from utils.config import Config
 from providers.entities.playlist import Playlist
 from providers.spotify.spotify_utils import get_songs
 import spotipy
@@ -6,17 +7,14 @@ from providers.entities.song import Song
 from providers.abstract_playlist_provider import AbstractPlaylistProvider
 from typing import List, cast
 
-SPOTIPY_CLIENT_ID = ""
-SPOTIPY_CLIENT_SECRET = ""
-
 
 class SpotifyPlaylistProvider(AbstractPlaylistProvider):
 
     def __init__(self, playlist: Playlist) -> None:
         self.playlist: Playlist = playlist
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,
-                                                                client_secret=SPOTIPY_CLIENT_SECRET))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
 
     def get_songs(self) -> List[Song]:
         playlist_tracks: dict = cast(dict,

@@ -1,3 +1,4 @@
+from utils.config import Config
 from providers.spotify.spotify_utils import get_albums, get_artists, get_songs
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -7,9 +8,6 @@ from providers.entities.artist import Artist
 from typing import List, Optional, cast
 from providers.abstract_artist_provider import AbstractArtistProvider
 
-SPOTIPY_CLIENT_ID = ""
-SPOTIPY_CLIENT_SECRET = ""
-
 
 class SpotifyArtistProvider(AbstractArtistProvider):
     artist_id: str = ""
@@ -18,8 +16,8 @@ class SpotifyArtistProvider(AbstractArtistProvider):
         self.artist = artist
 
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,
-                                                                client_secret=SPOTIPY_CLIENT_SECRET))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
 
         artists: dict = cast(dict, self.spotify.search(
             q=artist.name, type="artist"))

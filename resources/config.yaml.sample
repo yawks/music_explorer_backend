@@ -1,0 +1,24 @@
+providers:
+  spotify:
+    client_id: ""
+    client_secret: ""
+
+pages:
+  search:
+    - "spotify"
+    - "youtube"
+
+  album:
+    information:
+      - "wikipedia"
+
+  playlist:
+    songs:
+      - "spotify"
+      - "youtube"
+
+  artist:
+    information:
+      - "wikipedia"
+    top songs:
+      - "spotify"

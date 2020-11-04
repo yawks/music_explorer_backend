@@ -1,3 +1,4 @@
+from utils.config import Config
 from providers.spotify.spotify_utils import get_albums, get_artists, get_playlists, get_songs
 from spotipy.oauth2 import SpotifyClientCredentials
 from providers.abstract_search_provider import AbstractSearchProvider
@@ -6,20 +7,16 @@ from providers.entities.album import Album
 from providers.entities.artist import Artist
 from providers.entities.song import Song
 from providers.entities.playlist import Playlist
-from typing import List, Tuple, cast
+from typing import List, Tuple
 import spotipy
-
-
-SPOTIPY_CLIENT_ID = ""
-SPOTIPY_CLIENT_SECRET = ""
 
 
 class SpotifySearchProvider(AbstractSearchProvider):
 
     def __init__(self) -> None:
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,
-                                                                client_secret=SPOTIPY_CLIENT_SECRET))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
 
     def search(self, query: str) -> Tuple[List[Song], List[Artist], List[Album], List[Genre], List[Playlist]]:
         songs: List[Song] = []
