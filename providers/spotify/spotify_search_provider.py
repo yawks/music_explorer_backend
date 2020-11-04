@@ -10,8 +10,8 @@ from typing import List, Tuple, cast
 import spotipy
 
 
-SPOTIPY_CLIENT_ID = "2ec23fa3319a45e3b036e588f4848509"
-SPOTIPY_CLIENT_SECRET = "516852a0f792479a957944c1bf01e671"
+SPOTIPY_CLIENT_ID = ""
+SPOTIPY_CLIENT_SECRET = ""
 
 
 class SpotifySearchProvider(AbstractSearchProvider):
