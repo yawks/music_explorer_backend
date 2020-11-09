@@ -1,3 +1,4 @@
+from providers.spotify.spotify_id import SpotifyId
 from providers.entities.album import Album
 from typing import List, Optional
 from providers.entities.artist import Artist
@@ -9,7 +10,9 @@ TEST_ARTIST_NAME = "led zeppelin"
 
 def test_get_top_songs():
     spotify_artist_provider: SpotifyArtistProvider = SpotifyArtistProvider(
-        artist=Artist(name=TEST_ARTIST_NAME))
+        artist=Artist(
+            artist_id=SpotifyId("dummy"),
+            name=TEST_ARTIST_NAME))
 
     top_songs: Optional[List[Song]] = spotify_artist_provider.get_top_songs()
 
@@ -19,7 +22,7 @@ def test_get_top_songs():
 
 def test_get_all_albums():
     spotify_artist_provider: SpotifyArtistProvider = SpotifyArtistProvider(
-        artist=Artist(name=TEST_ARTIST_NAME))
+        artist=Artist(artist_id=SpotifyId("dummy"), name=TEST_ARTIST_NAME))
 
     albums: Optional[List[Album]] = spotify_artist_provider.get_all_albums()
 
@@ -29,7 +32,7 @@ def test_get_all_albums():
 
 def test_get_similar_artists():
     spotify_artist_provider: SpotifyArtistProvider = SpotifyArtistProvider(
-        artist=Artist(name=TEST_ARTIST_NAME))
+        artist=Artist(artist_id=SpotifyId("dummy"), name=TEST_ARTIST_NAME))
 
     spotify_artist_provider.get_information()
 

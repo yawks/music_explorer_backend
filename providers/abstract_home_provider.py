@@ -6,20 +6,20 @@ from providers.entities.genre import Genre
 from typing import List, Optional
 
 
-class AbtractHomeProvider(ABC):
+class AbstractHomeProvider(ABC):
 
     @abstractmethod
     def get_genres(self) -> Optional[List[Genre]]:
-        pass
+        return None
 
     @abstractmethod
     def get_new_releases(self) -> Optional[List[Album]]:
-        pass
+        return None
 
     @abstractmethod
     def get_artists_last_news(self) -> Optional[List[ArtistNews]]:
-        pass
+        return None
 
     @abstractmethod
     def get_trending_playlists(self) -> Optional[List[Playlist]]:
-        pass
+        return None

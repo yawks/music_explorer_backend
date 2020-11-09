@@ -1,15 +1,18 @@
+from providers.entities.object_id import ObjectId
 from typing import List
 from .artist import Artist
 
 
 class Song():
+    song_id: ObjectId
     title: str
     artist: Artist
     duration: int
     pictures_url: List[str]
     stream_url: str
 
-    def __init__(self, title: str, artist: Artist, duration: int, stream_url: str = "") -> None:
+    def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "") -> None:
+        self.song_id = song_id
         self.title = title
         self.artist = artist
         self.duration = duration

@@ -1,3 +1,5 @@
+from providers.spotify.spotify_id import SpotifyId
+from providers.entities.object_id import ObjectId
 from providers.entities.song import Song
 from providers.entities.artist import Artist
 from providers.entities.playlist import Playlist
@@ -10,8 +12,11 @@ def get_albums(albums: dict) -> List[Album]:
 
     if "items" in albums:
         for item in albums["items"]:
-            album: Album = Album(name=item["name"], artist=Artist(
-                item["artists"][0]["name"]))
+            album: Album = Album(
+                album_id=SpotifyId(item["id"]),
+                name=item["name"], artist=Artist(
+                    artist_id=SpotifyId(item["artists"][0]["id"]),
+                    name=item["artists"][0]["name"]))
             for image in item["images"]:
                 album.pictures_url.append(image["url"])
             results.append(album)
@@ -29,7 +34,7 @@ def get_artists(artists: dict) -> List[Artist]:
         items = artists["artists"]
 
     for item in items:
-        artist: Artist = Artist(item["name"])
+        artist: Artist = Artist(SpotifyId(item["id"]), item["name"])
         for image in item["images"]:
             artist.pictures_url.append(image["url"])
 
@@ -56,8 +61,10 @@ def get_song(item_song: dict) -> Song:
     if "track" in item_song:
         item = item_song["track"]
 
-    return Song(title=item["name"],
-                artist=Artist(item["artists"][0]["name"]),
+    return Song(song_id=SpotifyId(item["artists"][0]["id"]),
+                title=item["name"],
+                artist=Artist(
+                    SpotifyId(item["artists"][0]["id"]), item["artists"][0]["name"]),
                 duration=int(item["duration_ms"]/1000),
                 stream_url=item["preview_url"])
 

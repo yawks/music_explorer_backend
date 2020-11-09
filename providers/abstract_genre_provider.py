@@ -7,26 +7,26 @@ from providers.entities.playlist import Playlist
 from typing import List, Optional
 
 
-class AbtractGenreProvider(ABC):
+class AbstractGenreProvider(ABC):
     
     genre: Genre
 
     @abstractmethod
     def get_information(self) -> Optional[str]:
-        pass
+        return None
 
     @abstractmethod
     def get_top_songs(self) -> Optional[List[Song]]:
-        pass
+        return None
 
     @abstractmethod
     def get_new_releases(self) -> Optional[List[Album]]:
-        pass
+        return None
 
     @abstractmethod
     def get_artists_last_news(self) -> Optional[List[ArtistNews]]:
-        pass
+        return None
 
     @abstractmethod
     def get_trending_playlists(self) -> Optional[List[Playlist]]:
-        pass
+        return None

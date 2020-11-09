@@ -1,7 +1,6 @@
 pafy
 pyyaml
 youtube-dl
-music_story
 spotipy
 musicbrainzngs
 wikipedia

@@ -9,4 +9,4 @@ class AbstractPlaylistProvider(ABC):
 
     @abstractmethod
     def get_songs(self) -> List[Song]:
-        pass
+        return []

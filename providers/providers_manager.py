@@ -1,0 +1,68 @@
+from glob import glob
+import importlib
+import inspect
+import os
+from typing import Dict, Tuple
+from utils.singleton import Singleton
+
+
+@Singleton
+class ProviderManager():
+    providers: Dict[str, dict] = {}
+
+    def __init__(self) -> None:
+        for dir in glob("providers/*"):
+            if os.path.isdir(dir):
+                self._load_providers(dir)
+
+    def _load_providers(self, dir: str):
+        for provider_path in glob("%s/*.py" % dir):
+            if provider_path.strip(dir) != "__init__.py":
+                module_name, package_name = self._get_module_and_package_name(
+                    provider_path)
+
+                module = importlib.import_module(
+                    module_name, package=package_name)
+                for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider"]:
+                    if hasattr(module, abstract_provider):
+                        for member in inspect.getmembers(module):
+                            self._load_handler(
+                                provider_path, abstract_provider, module, member)
+
+    def _get_module_and_package_name(self, provider_path: str) -> Tuple[str, str]:
+        module_name: str = ".%s" % os.path.basename(provider_path)
+        package_name: str = os.path.dirname(
+            provider_path).replace(os.path.sep, ".")
+
+        thelen = len(".py")
+        if module_name[-thelen:] == ".py":
+            module_name = module_name[:-thelen]
+
+        return (module_name, package_name)
+
+    def _load_handler(self, provider_path: str, abstract_provider: str, module, provider_class):
+        
+        if provider_class[0].find("__") == -1 \
+                and isinstance(provider_class[1], type) \
+                and issubclass(provider_class[1], getattr(module, abstract_provider, "")) \
+                and provider_class[1].__name__ != abstract_provider:
+
+            provider_name: str = provider_path.split(os.path.sep)[1]
+            if provider_name not in self.providers:
+                self.providers[provider_name] = dict()
+
+            self.providers[provider_name][abstract_provider] = provider_class[1]
+        
+
+    def get_search_providers(self) -> list:
+        return self._get_providers_implementing("AbstractSearchProvider")
+
+    def _get_providers_implementing(self, abstract_provider: str) -> list:
+        providers: list = list()
+
+        for provider_name in self.providers:
+            for ap in self.providers[provider_name]:
+                if abstract_provider == ap:
+                    providers.append(self.providers[provider_name][abstract_provider])
+
+        return providers

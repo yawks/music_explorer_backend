@@ -10,24 +10,24 @@ from typing import List, Tuple
 class AbstractSearchProvider(ABC):
     @abstractmethod
     def search(self, query: str) -> Tuple[List[Song], List[Artist], List[Album], List[Genre], List[Playlist]]:
-        pass
+        return []
 
     @abstractmethod
     def search_song(self, query: str) -> List[Song]:
-        pass
+        return []
 
     @abstractmethod
     def search_artist(self, query: str) -> List[Artist]:
-        pass
+        return []
 
     @abstractmethod
     def search_album(self, query: str) -> List[Album]:
-        pass
+        return []
 
     @abstractmethod
     def search_genre(self, query: str) -> List[Genre]:
-        pass
+        return []
 
     @abstractmethod
     def search_playlist(self, query: str) -> List[Playlist]:
-        pass
+        return []

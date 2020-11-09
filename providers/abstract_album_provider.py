@@ -8,4 +8,4 @@ class AbstractAlbumProvider(ABC):
 
     @abstractmethod
     def get_information(self) -> Optional[str]:
-        pass
+        return None

@@ -1,3 +1,4 @@
+from providers.youtube.youtube_id import YoutubeId
 from providers.youtube.youtube_utils import convert_duration
 from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
@@ -38,7 +39,8 @@ class YoutubeSearchProvider(AbstractSearchProvider):
         playlists: List[Playlist] = []
         for playlist in self.ytmusic.search(query, filter="playlists"):
             p: Playlist = Playlist(
-                name=playlist["title"], playlist_id=playlist["browseId"])
+                playlist_id=YoutubeId(playlist["browseId"]),
+                name=playlist["title"])
             for thumbnail in playlist["thumbnails"]:
                 p.pictures_url.append(thumbnail)
             playlists.append(p)
@@ -49,13 +51,16 @@ class YoutubeSearchProvider(AbstractSearchProvider):
         songs: List[Song] = []
         for song in self.ytmusic.search(query, filter="songs"):
             s: Song = Song(
+                song_id=YoutubeId(song["videoId"]),
                 title=song["title"],
-                artist=Artist(name=song["artists"][0]["name"]),
+                artist=Artist(
+                    artist_id=YoutubeId(song["artists"][0]["id"]),
+                    name=song["artists"][0]["name"]),
                 duration=convert_duration(song["duration"]),
                 stream_url="https://youtube.com/%s" % song["videoId"],
             )
             for thumbnail in song["thumbnails"]:
                 s.pictures_url.append(thumbnail["url"])
             songs.append(s)
-        
+
         return songs

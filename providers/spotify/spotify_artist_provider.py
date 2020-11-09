@@ -1,3 +1,4 @@
+from providers.entities.artist_news import ArtistNews
 from utils.config import Config
 from providers.spotify.spotify_utils import get_albums, get_artists, get_songs
 import spotipy
@@ -47,3 +48,6 @@ class SpotifyArtistProvider(AbstractArtistProvider):
         tracks: dict = cast(
             dict, self.spotify.artist_top_tracks(self.artist_id))
         return get_songs(tracks)
+    
+    def get_news(self) -> Optional[List[ArtistNews]]:
+        return None

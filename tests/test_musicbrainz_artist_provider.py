@@ -1,5 +1,6 @@
 
 
+from providers.musicbrainz.musicbrainz_id import MusicBrainzId
 from typing import Optional
 from providers.entities.artist import Artist
 from providers.musicbrainz.musicbrainz_artist_provider import MusicbrainzArtistProvider
@@ -7,7 +8,9 @@ from providers.musicbrainz.musicbrainz_artist_provider import MusicbrainzArtistP
 
 def test_get_information():
     musicbrainz_artist_provider: MusicbrainzArtistProvider = MusicbrainzArtistProvider(
-        artist=Artist(name="Red Hot Chili Peppers"))
+        artist=Artist(
+            artist_id=MusicBrainzId("dummy"),
+            name="Red Hot Chili Peppers"))
 
     information: Optional[str] = musicbrainz_artist_provider.get_information()
 

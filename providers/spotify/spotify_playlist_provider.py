@@ -18,6 +18,6 @@ class SpotifyPlaylistProvider(AbstractPlaylistProvider):
 
     def get_songs(self) -> List[Song]:
         playlist_tracks: dict = cast(dict,
-                                     self.spotify.playlist_items(self.playlist.playlist_id))
+                                     self.spotify.playlist_items(self.playlist.playlist_id.get_id()))
 
         return get_songs(playlist_tracks)
