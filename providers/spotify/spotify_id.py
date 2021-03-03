@@ -5,6 +5,7 @@ SHORT_NAME="sp"
 class SpotifyId(ObjectId):
 
     def __init__(self, spotify_id: str) -> None:
+        super().__init__()
         super().add_provider_id(SHORT_NAME, spotify_id)
     
 

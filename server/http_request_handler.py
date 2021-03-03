@@ -1,9 +1,9 @@
-from typing import cast
-from server.music_explorer_http_server import MusicExplorerHTTPServer
+from providers.entities.object_id import ObjectId, object_id_serializer
+import jsons
+from urllib.parse import unquote
 from music.youtube_downloader import YoutubeDownloader
-from music.music_search import MusicSearch
+from server.search.search import Search
 from http.server import BaseHTTPRequestHandler
-import json
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
@@ -22,14 +22,20 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
         if self.path.startswith("/search/"):
             self._search()
+        elif self.path.startswith("/song/"):
+            self._search()
         elif self.path.startswith("/youtube_get/"):
             self._youtube_get()
         else:
             self._home()
 
     def _search(self):
-        self.respond(json.dumps(MusicSearch("%s://%s" % (cast(MusicExplorerHTTPServer, self.server).get_protocol(), self.headers.get('Host')),
-                                            self.path[len("/search/"):]).get_results()))
+        # self.respond(json.dumps(MusicSearch("%s://%s" % (cast(MusicExplorerHTTPServer, self.server).get_protocol(), self.headers.get('Host')),
+        #                                    self.path[len("/search/"):]).get_results()))
+        query = unquote(self.path[len("/search/"):])
+        jsons.set_serializer(object_id_serializer, ObjectId)
+        self.respond(jsons.dumps(
+            Search(query).get_results(), default=vars))
 
     def _youtube_get(self):
         youtube_id: str = ""

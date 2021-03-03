@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from server.music_explorer_http_server import MusicExplorerHTTPServer, LISTENING_PORT, LISTENING_HOSTNAME
+from utils.config import Config
+from server.music_explorer_http_server import MusicExplorerHTTPServer
 from server.http_request_handler import HTTPRequestHandler
 import logging
 import os
@@ -9,7 +10,8 @@ import sys
 def main(argv):
 
     logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
-    httpd = MusicExplorerHTTPServer((LISTENING_HOSTNAME, LISTENING_PORT), HTTPRequestHandler)
+    httpd = MusicExplorerHTTPServer((Config.instance().get(
+        "server", "host", default_value="127.0.0.1"), Config.instance().get("server", "port", default_value=8080)), HTTPRequestHandler)
 
     logging.getLogger().info("Server Starts - %s",
                              httpd.get_listening_url_prefix())

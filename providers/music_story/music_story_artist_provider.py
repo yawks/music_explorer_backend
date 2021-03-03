@@ -19,7 +19,7 @@ class MusicStoryArtistProvider(AbstractArtistProvider):
             self.artist = artist
             self.artist_id: int = -1
             results = self.music_story.search("artist", name=self.artist.name)
-            #self.artist_id = results[0].id
+            #s elf.artist_id = results[0].id
         except Exception as e:
             print(str(e))
             #TODO : log

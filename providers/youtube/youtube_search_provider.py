@@ -57,7 +57,7 @@ class YoutubeSearchProvider(AbstractSearchProvider):
                     artist_id=YoutubeId(song["artists"][0]["id"]),
                     name=song["artists"][0]["name"]),
                 duration=convert_duration(song["duration"]),
-                stream_url="https://youtube.com/%s" % song["videoId"],
+                stream_url="https://youtube.com/watch?v=%s" % song["videoId"],
             )
             for thumbnail in song["thumbnails"]:
                 s.pictures_url.append(thumbnail["url"])

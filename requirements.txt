@@ -1,3 +1,4 @@
+python-Levenshtein
 pafy
 pyyaml
 youtube-dl
@@ -5,3 +6,4 @@ spotipy
 musicbrainzngs
 wikipedia
 ytmusicapi
+jsons
