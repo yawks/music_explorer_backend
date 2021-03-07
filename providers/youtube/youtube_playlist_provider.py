@@ -16,7 +16,8 @@ class YoutubePlaylistProvider(AbstractPlaylistProvider):
 
     def get_songs(self) -> List[Song]:
         songs: List[Song] = []
-        playlist_id: Optional[str] =self.playlist.playlist_id.get_id()
+        playlist_id: Optional[str] = self.playlist.get_object_ids().get_id(
+            YoutubeId.get_short_name())
         if playlist_id is not None:
             result: dict = self.ytmusic.get_playlist(playlist_id)
             for track in result["tracks"]:

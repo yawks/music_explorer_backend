@@ -23,11 +23,14 @@ class ProviderManager():
 
                 module = importlib.import_module(
                     module_name, package=package_name)
-                for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider"]:
-                    if hasattr(module, abstract_provider):
-                        for member in inspect.getmembers(module):
-                            self._load_handler(
-                                provider_path, abstract_provider, module, member)
+                self._search_for_provider_classes(provider_path, module)
+
+    def _search_for_provider_classes(self, provider_path, module):
+        for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider", "AbstractAlbumProvider"]:
+            if hasattr(module, abstract_provider):
+                for member in inspect.getmembers(module):
+                    self._load_provider_module(
+                        provider_path, abstract_provider, module, member)
 
     def _get_module_and_package_name(self, provider_path: str) -> Tuple[str, str]:
         module_name: str = ".%s" % os.path.basename(provider_path)
@@ -40,8 +43,7 @@ class ProviderManager():
 
         return (module_name, package_name)
 
-    def _load_handler(self, provider_path: str, abstract_provider: str, module, provider_class):
-        
+    def _load_provider_module(self, provider_path: str, abstract_provider: str, module, provider_class):
         if provider_class[0].find("__") == -1 \
                 and isinstance(provider_class[1], type) \
                 and issubclass(provider_class[1], getattr(module, abstract_provider, "")) \
@@ -52,10 +54,15 @@ class ProviderManager():
                 self.providers[provider_name] = dict()
 
             self.providers[provider_name][abstract_provider] = provider_class[1]
-        
 
     def get_search_providers(self) -> list:
         return self._get_providers_implementing("AbstractSearchProvider")
+    
+    def get_album_providers(self) -> list:
+        return self._get_providers_implementing("AbstractAlbumProvider")
+    
+    def get_playlist_providers(self) -> list:
+        return self._get_providers_implementing("AbstractPlaylistProvider")
 
     def _get_providers_implementing(self, abstract_provider: str) -> list:
         providers: list = list()
@@ -63,6 +70,7 @@ class ProviderManager():
         for provider_name in self.providers:
             for ap in self.providers[provider_name]:
                 if abstract_provider == ap:
-                    providers.append(self.providers[provider_name][abstract_provider])
+                    providers.append(
+                        self.providers[provider_name][abstract_provider])
 
         return providers

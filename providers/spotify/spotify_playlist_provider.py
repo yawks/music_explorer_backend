@@ -1,5 +1,6 @@
 from utils.config import Config
 from providers.entities.playlist import Playlist
+from providers.spotify.spotify_id import SpotifyId
 from providers.spotify.spotify_utils import get_songs
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -18,6 +19,6 @@ class SpotifyPlaylistProvider(AbstractPlaylistProvider):
 
     def get_songs(self) -> List[Song]:
         playlist_tracks: dict = cast(dict,
-                                     self.spotify.playlist_items(self.playlist.playlist_id.get_id()))
+                                     self.spotify.playlist_items(self.playlist.get_object_ids().get_id(SpotifyId.get_short_name())))
 
         return get_songs(playlist_tracks)

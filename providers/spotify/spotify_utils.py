@@ -75,7 +75,7 @@ def get_playlists(playlists: dict) -> List[Playlist]:
     if "items" in playlists:
         for item in playlists["items"]:
             playlist: Playlist = Playlist(
-                name=item["name"], playlist_id=item["id"])
+                name=item["name"], playlist_id=SpotifyId(item["id"]))
             if "images" in item and len(item["images"]) > 0:
                 playlist.pictures_url.append(item["images"][0]["url"])
 

@@ -1,5 +1,6 @@
-from providers.entities.abstract_entity import AbstractEntity
 from providers.entities.object_id import ObjectId
+from providers.entities.abstract_entity import AbstractEntity
+from providers.entities.object_ids import ObjectIds
 from typing import List
 from .artist import Artist
 import Levenshtein
@@ -8,15 +9,15 @@ import Levenshtein
 class Song(AbstractEntity):
 
     def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "") -> None:
-        self.song_id: ObjectId = song_id
+        self.song_ids: ObjectIds = ObjectIds(song_id)
         self.title: str = title
         self.artist: Artist = artist
         self.duration: int = duration
         self.pictures_url: List[str] = []
         self.stream_url: List[str] = [stream_url]
 
-    def get_object_id(self) -> ObjectId:
-        return self.song_id
+    def get_object_ids(self) -> ObjectIds:
+        return self.song_ids
 
     def merge(self, song_from_other_provider: "Song"):
         super().merge(song_from_other_provider)
