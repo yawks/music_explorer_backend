@@ -11,7 +11,7 @@ from providers.entities.playlist import Playlist
 from typing import List, Tuple, cast
 
 
-class Search():
+class SearchHandler():
 
     def __init__(self, query: str) -> None:
         self.query: str = query

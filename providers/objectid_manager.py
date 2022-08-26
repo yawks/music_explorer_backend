@@ -70,6 +70,7 @@ class ObjectIdManager():
 
     def dumps_list(self, object_ids: ObjectIds) -> str:
         oids_encodable: Dict[str, str] = {}
+        oids_encodable["obj_query_name"] = object_ids.obj_query_name
         for short_name, object_id in object_ids.object_id_dict.items():
             oids_encodable[short_name] = object_id.oid
         return b64encode(jsons.dumps(oids_encodable).encode("ASCII")).decode("ASCII")
@@ -78,6 +79,7 @@ class ObjectIdManager():
         object_ids: ObjectIds = ObjectIds()
         json = literal_eval(
             b64decode(encoded.encode("ASCII")).decode("ASCII"))
+        object_ids.obj_query_name = json.get("obj_query_name")
         for oid_name in json:
             oid: Optional[ObjectId] = self.get_objectid_by_name(
                 oid_name, json[oid_name])

@@ -6,7 +6,7 @@ from providers.providers_manager import ProviderManager
 from typing import List, Optional
 
 
-class Album():
+class AlbumHandler():
 
     def __init__(self, album_ids: ObjectIds) -> None:
         self.album_ids: ObjectIds = album_ids

@@ -1,10 +1,10 @@
 from server.search.search_result import SearchResult
 from typing import List
-from server.search.search import Search
+from server.search.search_handler import SearchHandler
 
 
 def test_search():
-    search: Search = Search("led zeppelin")
+    search: SearchHandler = SearchHandler("led zeppelin")
 
     result: SearchResult = search.get_results()
 

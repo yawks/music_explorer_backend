@@ -1,12 +1,13 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from providers.entities.object_id import ObjectId
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 
 class ObjectIds(ABC):
 
     def __init__(self, object_id: Optional[ObjectId] = None) -> None:
         self.object_id_dict: Dict[str, ObjectId] = {}
+        self.obj_query_name: str = ""
         if object_id is not None:
             self.object_id_dict[object_id.get_short_name()] = object_id
 

@@ -8,6 +8,7 @@ class Genre(AbstractEntity):
 
     def __init__(self, genre_id: ObjectId, name: str, description: str = "") -> None:
         self.genre_ids: ObjectIds = ObjectIds(genre_id)
+        self.genre_ids.obj_query_name = name
         self.name: str = name
         self.description: str = description
         self.pictures_url: List[str] = []

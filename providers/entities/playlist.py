@@ -8,6 +8,7 @@ class Playlist(AbstractEntity):
 
     def __init__(self, playlist_id: ObjectId, name: str) -> None:
         self.playlist_ids: ObjectIds = ObjectIds(playlist_id)
+        self.playlist_ids.obj_query_name = name
         self.name: str = ""
         self.pictures_url: List[str] = []
         self.name = name

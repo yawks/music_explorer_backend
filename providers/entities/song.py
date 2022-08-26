@@ -14,7 +14,7 @@ class Song(AbstractEntity):
         self.artist: Artist = artist
         self.duration: int = duration
         self.pictures_url: List[str] = []
-        self.stream_url: List[str] = [stream_url]
+        self.stream_urls: List[str] = [stream_url]
 
     def get_object_ids(self) -> ObjectIds:
         return self.song_ids
@@ -22,7 +22,7 @@ class Song(AbstractEntity):
     def merge(self, song_from_other_provider: "Song"):
         super().merge(song_from_other_provider)
         self.pictures_url.extend(song_from_other_provider.pictures_url)
-        self.stream_url.extend(song_from_other_provider.stream_url)
+        self.stream_urls.extend(song_from_other_provider.stream_urls)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Song):
@@ -41,4 +41,4 @@ class Song(AbstractEntity):
     Duration: %ds
     Stream URL: %s
 
-""" % (self.title, str(self.artist), self.duration, self.stream_url)
+""" % (self.title, str(self.artist), self.duration, self.stream_urls)

@@ -10,6 +10,7 @@ class Artist(AbstractEntity):
     def __init__(self, artist_id: ObjectId, name: str) -> None:
         self.artist_ids: ObjectIds = ObjectIds(artist_id)
         self.name: str = name
+        self.artist_ids.obj_query_name = name
         self.pictures_url: List[str] = []
 
     def get_object_ids(self) -> ObjectIds:
