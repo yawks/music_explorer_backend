@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from providers.entities.object_ids import ObjectIds
-from providers.entities.object_id import ObjectId
 from providers.entities.album import Album
 from typing import Optional
 

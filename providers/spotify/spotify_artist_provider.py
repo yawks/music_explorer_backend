@@ -17,8 +17,8 @@ class SpotifyArtistProvider(AbstractArtistProvider):
     def __init__(self, artist_object_ids: ObjectIds) -> None:
         super().__init__(artist_object_ids)
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
-                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config().get("providers", "spotify", "client_secret")))
 
     def get_object_ids(self) -> ObjectIds:
         return self.artist_object_ids

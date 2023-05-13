@@ -3,17 +3,21 @@ import importlib
 import inspect
 import os
 from typing import Dict, Tuple
-from utils.singleton import Singleton
 
 
-@Singleton
 class ProviderManager():
+    _self = None
     providers: Dict[str, dict] = {}
 
     def __init__(self) -> None:
         for dir in glob("providers/*"):
             if os.path.isdir(dir):
                 self._load_providers(dir)
+
+    def __new__(cls):
+        if cls._self is None:
+            cls._self = super().__new__(cls)
+        return cls._self
 
     def _load_providers(self, dir: str):
         for provider_path in glob("%s/*.py" % dir):
@@ -26,7 +30,7 @@ class ProviderManager():
                 self._search_for_provider_classes(provider_path, module)
 
     def _search_for_provider_classes(self, provider_path, module):
-        for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider", "AbstractAlbumProvider", "AbstractArtistProvider"]:
+        for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider", "AbstractAlbumProvider", "AbstractArtistProvider", "AbstractSongProvider"]:
             if hasattr(module, abstract_provider):
                 for member in inspect.getmembers(module):
                     self._load_provider_module(
@@ -57,18 +61,21 @@ class ProviderManager():
 
     def get_search_providers(self) -> list:
         return self._get_providers_implementing("AbstractSearchProvider")
-    
+
     def get_album_providers(self) -> list:
         return self._get_providers_implementing("AbstractAlbumProvider")
-    
+
     def get_artist_providers(self) -> list:
         return self._get_providers_implementing("AbstractArtistProvider")
-    
+
     def get_playlist_providers(self) -> list:
         return self._get_providers_implementing("AbstractPlaylistProvider")
 
+    def get_song_providers(self) -> list:
+        return self._get_providers_implementing("AbstractSongProvider")
+
     def _get_providers_implementing(self, abstract_provider: str) -> list:
-        providers: list = list()
+        providers: list = []
 
         for provider_name in self.providers:
             for ap in self.providers[provider_name]:

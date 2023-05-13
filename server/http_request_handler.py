@@ -74,14 +74,14 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _album(self, album_id: str):
         self.respond(jsons.dumps(
-            AlbumHandler(ObjectIdManager.instance().loads(album_id)).get_results()))
+            AlbumHandler(ObjectIdManager().loads(album_id)).get_results()))
 
     def _artist(self, artist_id: str):
-        self.respond(jsons.dumps(ArtistHandler(ObjectIdManager.instance().loads(
+        self.respond(jsons.dumps(ArtistHandler(ObjectIdManager().loads(
             artist_id), ArtistQueryType.ARTIST).get_results()))
 
     def _info_artist(self, artist_id: str):
-        self.respond(jsons.dumps(ArtistHandler(ObjectIdManager.instance().loads(
+        self.respond(jsons.dumps(ArtistHandler(ObjectIdManager().loads(
             artist_id), ArtistQueryType.INFO).get_results()))
 
     def _home(self, query: str):

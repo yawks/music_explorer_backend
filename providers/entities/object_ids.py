@@ -1,6 +1,6 @@
 from abc import ABC
-from providers.entities.object_id import ObjectId
 from typing import Dict, Optional
+from providers.entities.object_id import ObjectId
 
 
 class ObjectIds(ABC):

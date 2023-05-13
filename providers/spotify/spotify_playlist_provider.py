@@ -14,8 +14,8 @@ class SpotifyPlaylistProvider(AbstractPlaylistProvider):
     def __init__(self, playlist: Playlist) -> None:
         self.playlist: Playlist = playlist
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
-                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config().get("providers", "spotify", "client_secret")))
 
     def get_songs(self) -> List[Song]:
         playlist_tracks: dict = cast(dict,

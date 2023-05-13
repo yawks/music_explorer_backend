@@ -7,13 +7,13 @@ from typing import List, Optional
 
 
 class AlbumHandler():
-
+    
     def __init__(self, album_ids: ObjectIds) -> None:
         self.album_ids: ObjectIds = album_ids
         self.album_provider_threads: List[AlbumProviderThread] = []
         threads: list = []
         try:
-            for album_provider_class in ProviderManager.instance().get_album_providers():
+            for album_provider_class in ProviderManager().get_album_providers():
                 album_provider_thread: AlbumProviderThread = AlbumProviderThread(
                     album_provider_class(), album_ids)
                 self.album_provider_threads.append(album_provider_thread)
@@ -24,7 +24,8 @@ class AlbumHandler():
                 thread.join()
         except Exception as e:
             print(str(e))
-
+    
+    
     def get_results(self) -> Optional[album.Album]:
         found_album: Optional[album.Album] = None
         for album_provider_thread in self.album_provider_threads:

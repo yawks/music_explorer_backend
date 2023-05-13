@@ -20,7 +20,7 @@ class ArtistHandler():
         self.artist_provider_threads: List[AbstractArtistThread] = []
         threads: list = []
 
-        for artist_provider_class in ProviderManager.instance().get_artist_providers():
+        for artist_provider_class in ProviderManager().get_artist_providers():
             artist_provider_object = artist_provider_class(artist_ids)
             if query_type == ArtistQueryType.NEWS:
                 artist_thread: AbstractArtistThread = ArtistNewsThread(

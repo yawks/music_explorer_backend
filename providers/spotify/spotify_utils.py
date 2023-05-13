@@ -61,7 +61,7 @@ def get_song(item_song: dict) -> Song:
     if "track" in item_song:
         item = item_song["track"]
 
-    return Song(song_id=SpotifyId(item["artists"][0]["id"]),
+    return Song(song_id=SpotifyId(item["uri"]),
                 title=item["name"],
                 artist=Artist(
                     SpotifyId(item["artists"][0]["id"]), item["artists"][0]["name"]),

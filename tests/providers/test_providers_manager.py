@@ -8,7 +8,7 @@ from providers.providers_manager import ProviderManager
 
 
 def test_search_providers():
-    search_providers: list = ProviderManager.instance().get_search_providers()
+    search_providers: list = ProviderManager().get_search_providers()
     assert len(search_providers) > 0
 
     search_provider_class = search_providers[0]

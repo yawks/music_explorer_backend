@@ -18,8 +18,8 @@ class MusicbrainzArtistProvider(AbstractArtistProvider):
             "0.1",
             "https://github.com/",
         )
-        musicbrainzngs.auth(Config.instance().get("providers", "musicbrainz", "login"),
-                            Config.instance().get("providers", "musicbrainz", "password"))
+        musicbrainzngs.auth(Config().get("providers", "musicbrainz", "login"),
+                            Config().get("providers", "musicbrainz", "password"))
 
     def get_object_ids(self) -> ObjectIds:
         return self.artist_object_ids

@@ -1,3 +1,4 @@
+import json
 from providers.entities.object_id import ObjectId
 from providers.entities.abstract_entity import AbstractEntity
 from providers.entities.object_ids import ObjectIds
@@ -7,6 +8,11 @@ import Levenshtein
 
 
 class Song(AbstractEntity):
+    """Song entity
+
+    Args:
+        AbstractEntity: generic entity
+    """
 
     def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "") -> None:
         self.song_ids: ObjectIds = ObjectIds(song_id)
@@ -19,10 +25,10 @@ class Song(AbstractEntity):
     def get_object_ids(self) -> ObjectIds:
         return self.song_ids
 
-    def merge(self, song_from_other_provider: "Song"):
-        super().merge(song_from_other_provider)
-        self.pictures_url.extend(song_from_other_provider.pictures_url)
-        self.stream_urls.extend(song_from_other_provider.stream_urls)
+    def merge(self, entity_from_another_provider: "Song"):
+        super().merge(entity_from_another_provider)
+        self.pictures_url.extend(entity_from_another_provider.pictures_url)
+        self.stream_urls.extend(entity_from_another_provider.stream_urls)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Song):

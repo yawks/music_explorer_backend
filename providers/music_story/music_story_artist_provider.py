@@ -15,8 +15,8 @@ class MusicStoryArtistProvider(AbstractArtistProvider):
 
     def __init__(self, artist_object_ids: ObjectIds) -> None:
         super().__init__(artist_object_ids)
-        self.music_story = MusicStoryApi(Config.instance().get("providers", "music_story", "consumer_key"),
-                                         Config.instance().get("providers", "music_story", "consumer_secret"))
+        self.music_story = MusicStoryApi(Config().get("providers", "music_story", "consumer_key"),
+                                         Config().get("providers", "music_story", "consumer_secret"))
 
     def get_object_ids(self) -> ObjectIds:
         return self.artist_object_ids
@@ -43,7 +43,7 @@ class MusicStoryArtistProvider(AbstractArtistProvider):
         t ry:
             if self.artist_id > -1:
                 _ = self.music_story.get(
-                    "news", id=self.artist_id, lang=Config.instance().get("lang")[0])
+                    "news", id=self.artist_id, lang=Config().get("lang")[0])
                 # a a = "2"
         except Exception as e:
             print(str(e))
@@ -56,7 +56,7 @@ class MusicStoryArtistProvider(AbstractArtistProvider):
         try:
             self.music_story.connect()
             _ = self.music_story.get(
-                "news", id=self.artist_object_ids.get_id(MusicStoryId), lang=Config.instance().get("lang")[0])
+                "news", id=self.artist_object_ids.get_id(MusicStoryId), lang=Config().get("lang")[0])
 
             """
             _ = s elf.music_story.search(

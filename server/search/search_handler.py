@@ -1,14 +1,14 @@
+from typing import List, Tuple, cast
+from threading import Thread
 from server.search.search_result import SearchResult
 from providers.entities.abstract_entity import AbstractEntity
 from providers.providers_manager import ProviderManager
 from providers.abstract_search_provider import AbstractSearchProvider
-from threading import Thread
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
 from providers.entities.song import Song
 from providers.entities.playlist import Playlist
-from typing import List, Tuple, cast
 
 
 class SearchHandler():
@@ -17,20 +17,21 @@ class SearchHandler():
         self.query: str = query
         self.search_provider_threads: List[SearchProviderThread] = []
         threads: list = []
-        try:
-            for search_provider_class in ProviderManager.instance().get_search_providers():
+        for search_provider_class in ProviderManager().get_search_providers():
+            try:
                 search_provider_thread: SearchProviderThread = SearchProviderThread(
                     search_provider_class(), query)
                 self.search_provider_threads.append(search_provider_thread)
                 threads.append(search_provider_thread)
                 search_provider_thread.start()
 
-            for thread in threads:
-                thread.join()
-        except Exception as e:
-            print(str(e))
+            except Exception as e:
+                print(str(e))
 
-    def get_results(self) -> SearchResult:
+        for thread in threads:
+            thread.join()
+
+    def get_results(self) -> dict:
         songs: List[Song] = []
         artists: List[Artist] = []
         albums: List[Album] = []
@@ -55,7 +56,7 @@ class SearchHandler():
             playlists = cast(List[Playlist], self._merge_entities(
                 cast(List[AbstractEntity], artists), cast(List[AbstractEntity], results[4])))
 
-        return SearchResult(songs, artists, albums, genres, playlists)
+        return SearchResult(songs, artists, albums, genres, playlists).get_json()
 
     def _merge_entities(self, a_entities: List[AbstractEntity], b_entities: List[AbstractEntity]) -> List[AbstractEntity]:
         merged_entities: List[AbstractEntity] = b_entities

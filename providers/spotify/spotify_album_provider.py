@@ -14,8 +14,8 @@ class SpotifyAlbumProvider(AbstractAlbumProvider):
 
     def __init__(self) -> None:
         self.spotify = spotipy.Spotify(
-            client_credentials_manager=SpotifyClientCredentials(client_id=Config.instance().get("providers", "spotify", "client_id"),
-                                                                client_secret=Config.instance().get("providers", "spotify", "client_secret")))
+            client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
+                                                                client_secret=Config().get("providers", "spotify", "client_secret")))
 
     def get_information(self) -> Optional[str]:
         return None

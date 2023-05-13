@@ -4,33 +4,37 @@ import inspect
 import os
 from base64 import b64encode, b64decode
 from ast import literal_eval
-from typing import Dict, List, Optional, Tuple, Union
-from utils.singleton import Singleton
+from typing import Dict, Optional, Tuple, Union
+import jsons
 from providers.entities.object_ids import ObjectIds
 from providers.entities.object_id import ObjectId
-import jsons
 
 
-@Singleton
 class ObjectIdManager():
+    _self = None
     object_ids: dict = {}
 
     def __init__(self) -> None:
-        for dir in glob("providers/*"):
-            if os.path.isdir(dir):
-                self._load_providers(dir)
+        for directory in glob("providers/*"):
+            if os.path.isdir(directory):
+                self._load_providers(directory)
 
-    def _load_providers(self, dir: str):
-        for provider_path in glob("%s/*.py" % dir):
-            if provider_path.strip(dir) != "__init__.py":
+    def __new__(cls):
+        if cls._self is None:
+            cls._self = super().__new__(cls)
+        return cls._self
+
+    def _load_providers(self, directory: str):
+        for provider_path in glob(f"{directory}/*.py"):
+            if provider_path.strip(directory) != "__init__.py":
                 module_name, package_name = self._get_module_and_package_name(
                     provider_path)
 
                 module = importlib.import_module(
                     module_name, package=package_name)
-                self._search_for_objectid_classes(provider_path, module)
+                self._search_for_objectid_classes(module)
 
-    def _search_for_objectid_classes(self, provider_path, module):
+    def _search_for_objectid_classes(self, module):
         for abstract_provider in ["ObjectId"]:
             if hasattr(module, abstract_provider):
                 for member in inspect.getmembers(module):
@@ -38,7 +42,7 @@ class ObjectIdManager():
                         abstract_provider, module, member)
 
     def _get_module_and_package_name(self, provider_path: str) -> Tuple[str, str]:
-        module_name: str = ".%s" % os.path.basename(provider_path)
+        module_name: str = "." + os.path.basename(provider_path)
         package_name: str = os.path.dirname(
             provider_path).replace(os.path.sep, ".")
 
@@ -89,5 +93,5 @@ class ObjectIdManager():
         return object_ids
 
 
-def object_id_serializer(object_ids: ObjectIds, **kwargs) -> Union[int, str]:
-    return ObjectIdManager.instance().dumps_list(object_ids)
+def object_id_serializer(object_ids: ObjectIds, **_) -> Union[int, str]:
+    return ObjectIdManager().dumps_list(object_ids)
