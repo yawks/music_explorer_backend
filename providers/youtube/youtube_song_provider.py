@@ -28,11 +28,11 @@ class YoutubeSongProvider(AbstractSongProvider):
                         name=result["videoDetails"]["author"]),
                     duration=convert_duration(
                         result["videoDetails"]["lengthSeconds"]),
-                    stream_url=result["videoDetails"]["videoId"])
+                    external_url="https://www.youtube.com/watch?v=" + result["videoDetails"]["videoId"])
                 for thumbnail in result["videoDetails"]["thumbnail"]["thumbnails"]:
                     song.pictures_url.append(thumbnail["url"])
 
         return song
 
-    def get_information(self) -> str | None:
+    def get_information(self) -> Optional[str]:
         return super().get_information()

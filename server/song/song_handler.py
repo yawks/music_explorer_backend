@@ -18,11 +18,14 @@ class SongHandler():
         threads: list = []
         try:
             for song_provider_class in ProviderManager().get_song_providers():
-                song_provider_thread: SongProviderThread = SongProviderThread(
-                    song_provider_class(), song_ids)
-                self.song_provider_threads.append(song_provider_thread)
-                threads.append(song_provider_thread)
-                song_provider_thread.start()
+                try:
+                    song_provider_thread: SongProviderThread = SongProviderThread(
+                        song_provider_class(), song_ids)
+                    self.song_provider_threads.append(song_provider_thread)
+                    threads.append(song_provider_thread)
+                    song_provider_thread.start()
+                except Exception as e:
+                    print(str(e))
 
             for thread in threads:
                 thread.join()

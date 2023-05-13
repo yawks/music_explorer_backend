@@ -14,13 +14,20 @@ class Song(AbstractEntity):
         AbstractEntity: generic entity
     """
 
-    def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "") -> None:
+    def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "", external_url: str = "") -> None:
         self.song_ids: ObjectIds = ObjectIds(song_id)
         self.title: str = title
         self.artist: Artist = artist
         self.duration: int = duration
         self.pictures_url: List[str] = []
-        self.stream_urls: List[str] = [stream_url]
+        self.stream_urls: List[str] = []
+        self.external_urls: List[str] = []
+
+        if stream_url != "":
+            self.stream_urls.append(stream_url)
+        
+        if external_url != "":
+            self.external_urls.append(external_url)
 
     def get_object_ids(self) -> ObjectIds:
         return self.song_ids

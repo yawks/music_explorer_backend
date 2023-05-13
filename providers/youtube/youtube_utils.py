@@ -10,7 +10,7 @@ def convert_duration(duration: str) -> int:
     Returns:
         int: the number of seconds of the duration
     """
-    d: int = 0
+    d: int = int(duration)
     if duration.count(":") == 1:
         d = int((datetime.strptime(
             duration, "%M:%S")-datetime(1900, 1, 1)).total_seconds())
