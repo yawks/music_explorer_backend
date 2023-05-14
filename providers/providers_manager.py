@@ -30,7 +30,7 @@ class ProviderManager():
                 self._search_for_provider_classes(provider_path, module)
 
     def _search_for_provider_classes(self, provider_path, module):
-        for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider", "AbstractAlbumProvider", "AbstractArtistProvider", "AbstractSongProvider"]:
+        for abstract_provider in ["AbstractSearchProvider", "AbstractPlaylistProvider", "AbstractAlbumProvider", "AbstractArtistProvider", "AbstractTrackProvider"]:
             if hasattr(module, abstract_provider):
                 for member in inspect.getmembers(module):
                     self._load_provider_module(
@@ -71,8 +71,8 @@ class ProviderManager():
     def get_playlist_providers(self) -> list:
         return self._get_providers_implementing("AbstractPlaylistProvider")
 
-    def get_song_providers(self) -> list:
-        return self._get_providers_implementing("AbstractSongProvider")
+    def get_track_providers(self) -> list:
+        return self._get_providers_implementing("AbstractTrackProvider")
 
     def _get_providers_implementing(self, abstract_provider: str) -> list:
         providers: list = []
@@ -84,3 +84,10 @@ class ProviderManager():
                         self.providers[provider_name][abstract_provider])
 
         return providers
+
+    def list(self, provider_type: str) -> dict:
+        result = {}
+        if provider_type == "track":
+            result = self._get_providers_implementing("AbstractTrackProvider")
+
+        return result

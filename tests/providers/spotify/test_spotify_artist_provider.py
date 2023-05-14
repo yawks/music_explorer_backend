@@ -2,22 +2,22 @@ from providers.spotify.spotify_id import SpotifyId
 from providers.entities.album import Album
 from typing import List, Optional
 from providers.entities.artist import Artist
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.spotify.spotify_artist_provider import SpotifyArtistProvider
 
 TEST_ARTIST_NAME = "led zeppelin"
 
 
-def test_get_top_songs():
+def test_get_top_tracks():
     spotify_artist_provider: SpotifyArtistProvider = SpotifyArtistProvider(
         artist=Artist(
             artist_id=SpotifyId("dummy"),
             name=TEST_ARTIST_NAME))
 
-    top_songs: Optional[List[Song]] = spotify_artist_provider.get_top_songs()
+    top_tracks: Optional[List[Track]] = spotify_artist_provider.get_top_tracks()
 
-    if top_songs is None or len(top_songs) == 0:
-        raise AssertionError("led zeppelin has many top songs!")
+    if top_tracks is None or len(top_tracks) == 0:
+        raise AssertionError("led zeppelin has many top tracks!")
 
 
 def test_get_all_albums():

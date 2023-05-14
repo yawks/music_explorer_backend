@@ -8,5 +8,5 @@ def test_search():
 
     result: SearchResult = search.get_results()
 
-    if len(result.songs) == 0:
+    if len(result.tracks) == 0:
         raise AssertionError("result must not be empty")

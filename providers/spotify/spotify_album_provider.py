@@ -1,4 +1,4 @@
-from providers.spotify.spotify_utils import get_songs
+from providers.spotify.spotify_utils import get_tracks
 from providers.abstract_album_provider import AbstractAlbumProvider
 from providers.spotify.spotify_id import SpotifyId
 from providers.entities.artist import Artist
@@ -34,7 +34,7 @@ class SpotifyAlbumProvider(AbstractAlbumProvider):
                     artist=Artist(
                         artist_id=SpotifyId(spotify_album["artists"][0]["id"]),
                         name=spotify_album["artists"][0]["name"]))
-                album.songs = get_songs(spotify_album["tracks"])
+                album.tracks = get_tracks(spotify_album["tracks"])
                 for image in spotify_album["images"]:
                     album.pictures_url.append(image["url"])
 

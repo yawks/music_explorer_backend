@@ -2,11 +2,11 @@ from providers.entities.artist_news import ArtistNews
 from providers.entities.object_ids import ObjectIds
 from providers.spotify.spotify_id import SpotifyId
 from utils.config import Config
-from providers.spotify.spotify_utils import get_albums, get_artists, get_songs
+from providers.spotify.spotify_utils import get_albums, get_artists, get_tracks
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from providers.entities.album import Album
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.artist import Artist
 from typing import List, Optional, cast
 from providers.abstract_artist_provider import AbstractArtistProvider
@@ -41,10 +41,10 @@ class SpotifyArtistProvider(AbstractArtistProvider):
             self.artist_object_ids.get_id(SpotifyId.get_short_name())))
         return get_albums(albums)
 
-    def get_top_songs(self) -> Optional[List[Song]]:
+    def get_top_tracks(self) -> Optional[List[Track]]:
         tracks: dict = cast(
             dict, self.spotify.artist_top_tracks(self.artist_object_ids.get_id(SpotifyId.get_short_name())))
-        return get_songs(tracks)
+        return get_tracks(tracks)
 
     def get_news(self) -> Optional[List[ArtistNews]]:
         return None

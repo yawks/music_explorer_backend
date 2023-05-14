@@ -7,15 +7,15 @@ from .artist import Artist
 import Levenshtein
 
 
-class Song(AbstractEntity):
-    """Song entity
+class Track(AbstractEntity):
+    """Track entity
 
     Args:
         AbstractEntity: generic entity
     """
 
-    def __init__(self, song_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "", external_url: str = "") -> None:
-        self.song_ids: ObjectIds = ObjectIds(song_id)
+    def __init__(self, track_id: ObjectId, title: str, artist: Artist, duration: int, stream_url: str = "", external_url: str = "") -> None:
+        self.track_ids: ObjectIds = ObjectIds(track_id)
         self.title: str = title
         self.artist: Artist = artist
         self.duration: int = duration
@@ -30,25 +30,25 @@ class Song(AbstractEntity):
             self.external_urls.append(external_url)
 
     def get_object_ids(self) -> ObjectIds:
-        return self.song_ids
+        return self.track_ids
 
-    def merge(self, entity_from_another_provider: "Song"):
+    def merge(self, entity_from_another_provider: "Track"):
         super().merge(entity_from_another_provider)
         self.pictures_url.extend(entity_from_another_provider.pictures_url)
         self.stream_urls.extend(entity_from_another_provider.stream_urls)
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Song):
+        if not isinstance(other, Track):
             return NotImplemented
-        same_song: bool = False
-        other_song: Song = other
-        if Levenshtein.ratio(self.title, other_song.title) > 0.7 \
-                and self.artist == other_song.artist:
-            same_song = True
-        return same_song
+        same_track: bool = False
+        other_track: Track = other
+        if Levenshtein.ratio(self.title, other_track.title) > 0.7 \
+                and self.artist == other_track.artist:
+            same_track = True
+        return same_track
 
     def __repr__(self) -> str:
-        return """Song : %s
+        return """Track : %s
 ----
     Artist: %s
     Duration: %ds

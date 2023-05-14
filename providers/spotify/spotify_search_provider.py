@@ -2,12 +2,12 @@ from typing import List, Tuple
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from utils.config import Config
-from providers.spotify.spotify_utils import get_albums, get_artists, get_playlists, get_songs
+from providers.spotify.spotify_utils import get_albums, get_artists, get_playlists, get_tracks
 from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.playlist import Playlist
 
 
@@ -18,8 +18,8 @@ class SpotifySearchProvider(AbstractSearchProvider):
             client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
                                                                 client_secret=Config().get("providers", "spotify", "client_secret")))
 
-    def search(self, query: str) -> Tuple[List[Song], List[Artist], List[Album], List[Genre], List[Playlist]]:
-        songs: List[Song] = []
+    def search(self, query: str) -> Tuple[List[Track], List[Artist], List[Album], List[Genre], List[Playlist]]:
+        tracks: List[Track] = []
         artists: List[Artist] = []
         albums: List[Album] = []
         genres: List[Genre] = []
@@ -30,10 +30,10 @@ class SpotifySearchProvider(AbstractSearchProvider):
 
         albums = get_albums(results["albums"])
         artists = get_artists(results["artists"])
-        songs = get_songs(results["tracks"])
+        tracks = get_tracks(results["tracks"])
         playlists = get_playlists(results["playlists"])
 
-        return (songs, artists, albums, genres, playlists)
+        return (tracks, artists, albums, genres, playlists)
 
     def search_album(self, query: str) -> List[Album]:
         results = self.spotify.search(
@@ -55,5 +55,5 @@ class SpotifySearchProvider(AbstractSearchProvider):
             q=query, type="playlist")
         return get_playlists(results["playlists"])
 
-    def search_song(self, query: str) -> List[Song]:
+    def search_track(self, query: str) -> List[Track]:
         return []

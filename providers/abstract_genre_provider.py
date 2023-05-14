@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from providers.entities.artist_news import ArtistNews
 from providers.entities.genre import Genre
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.album import Album
 from providers.entities.playlist import Playlist
 from typing import List, Optional
@@ -16,7 +16,7 @@ class AbstractGenreProvider(ABC):
         return None
 
     @abstractmethod
-    def get_top_songs(self) -> Optional[List[Song]]:
+    def get_top_tracks(self) -> Optional[List[Track]]:
         return None
 
     @abstractmethod

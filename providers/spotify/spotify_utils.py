@@ -1,6 +1,6 @@
 from providers.spotify.spotify_id import SpotifyId
 from providers.entities.object_id import ObjectId
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.artist import Artist
 from providers.entities.playlist import Playlist
 from typing import List, cast
@@ -43,25 +43,25 @@ def get_artists(artists: dict) -> List[Artist]:
     return results
 
 
-def get_songs(tracks: dict) -> List[Song]:
-    results: List[Song] = []
+def get_tracks(tracks: dict) -> List[Track]:
+    results: List[Track] = []
 
     if "items" in tracks:
         for item in tracks["items"]:
-            results.append(get_song(item))
+            results.append(get_track(item))
     elif "tracks" in tracks:
         for item in tracks["tracks"]:
-            results.append(get_song(item))
+            results.append(get_track(item))
 
     return results
 
 
-def get_song(item_song: dict) -> Song:
-    item: dict = item_song
-    if "track" in item_song:
-        item = item_song["track"]
+def get_track(item_track: dict) -> Track:
+    item: dict = item_track
+    if "track" in item_track:
+        item = item_track["track"]
 
-    return Song(song_id=SpotifyId(item["uri"]),
+    return Track(track_id=SpotifyId(item["uri"]),
                 title=item["name"],
                 artist=Artist(
                     SpotifyId(item["artists"][0]["id"]), item["artists"][0]["name"]),

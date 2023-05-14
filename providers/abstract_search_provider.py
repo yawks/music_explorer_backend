@@ -2,18 +2,18 @@ from abc import ABC, abstractmethod
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.playlist import Playlist
 from typing import List, Tuple
 
 
 class AbstractSearchProvider(ABC):
     @abstractmethod
-    def search(self, query: str) -> Tuple[List[Song], List[Artist], List[Album], List[Genre], List[Playlist]]:
+    def search(self, query: str) -> Tuple[List[Track], List[Artist], List[Album], List[Genre], List[Playlist]]:
         return []
 
     @abstractmethod
-    def search_song(self, query: str) -> List[Song]:
+    def search_track(self, query: str) -> List[Track]:
         return []
 
     @abstractmethod

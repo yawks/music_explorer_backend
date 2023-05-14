@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from providers.entities.object_ids import ObjectIds
-from providers.entities.object_id import ObjectId
 from providers.entities.artist_news import ArtistNews
 from providers.entities.album import Album
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.artist import Artist
 from typing import List, Optional
 
@@ -22,7 +21,7 @@ class AbstractArtistProvider(ABC):
         return None
 
     @abstractmethod
-    def get_top_songs(self) -> Optional[List[Song]]:
+    def get_top_tracks(self) -> Optional[List[Track]]:
         return None
 
     @abstractmethod

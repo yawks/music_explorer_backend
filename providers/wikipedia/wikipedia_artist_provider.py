@@ -3,7 +3,7 @@ from providers.entities.artist_news import ArtistNews
 from wikipedia.exceptions import PageError
 from providers.entities.album import Album
 from providers.entities.object_ids import ObjectIds
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.artist import Artist
 from typing import List, Optional
 from providers.abstract_artist_provider import AbstractArtistProvider
@@ -40,7 +40,7 @@ class WikipediaArtistProvider(AbstractArtistProvider):
     def get_top_albums(self) -> Optional[List[Album]]:
         return None
 
-    def get_top_songs(self) -> Optional[List[Song]]:
+    def get_top_tracks(self) -> Optional[List[Track]]:
         return None
 
     def get_news(self) -> Optional[List[ArtistNews]]:

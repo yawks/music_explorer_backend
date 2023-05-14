@@ -7,7 +7,7 @@ from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.playlist import Playlist
 
 
@@ -32,17 +32,17 @@ class SearchHandler():
             thread.join()
 
     def get_results(self) -> dict:
-        songs: List[Song] = []
+        tracks: List[Track] = []
         artists: List[Artist] = []
         albums: List[Album] = []
         genres: List[Genre] = []
         playlists: List[Playlist] = []
 
         for search_provider_thread in self.search_provider_threads:
-            results: Tuple[List[Song], List[Artist],
+            results: Tuple[List[Track], List[Artist],
                            List[Album], List[Genre], List[Playlist]] = search_provider_thread.results
-            songs = cast(List[Song], self._merge_entities(
-                cast(List[AbstractEntity], songs), cast(List[AbstractEntity], results[0])))
+            tracks = cast(List[Track], self._merge_entities(
+                cast(List[AbstractEntity], tracks), cast(List[AbstractEntity], results[0])))
 
             artists = cast(List[Artist], self._merge_entities(
                 cast(List[AbstractEntity], artists), cast(List[AbstractEntity], results[1])))
@@ -56,7 +56,7 @@ class SearchHandler():
             playlists = cast(List[Playlist], self._merge_entities(
                 cast(List[AbstractEntity], artists), cast(List[AbstractEntity], results[4])))
 
-        return SearchResult(songs, artists, albums, genres, playlists).get_json()
+        return SearchResult(tracks, artists, albums, genres, playlists).get_json()
 
     def _merge_entities(self, a_entities: List[AbstractEntity], b_entities: List[AbstractEntity]) -> List[AbstractEntity]:
         merged_entities: List[AbstractEntity] = b_entities
@@ -80,7 +80,7 @@ class SearchProviderThread(Thread):
         Thread.__init__(self)
         self.search_provider: AbstractSearchProvider = search_provider
         self.query: str = query
-        self.results: Tuple[List[Song], List[Artist],
+        self.results: Tuple[List[Track], List[Artist],
                             List[Album], List[Genre], List[Playlist]] = ([], [], [], [], [])
 
     def run(self):

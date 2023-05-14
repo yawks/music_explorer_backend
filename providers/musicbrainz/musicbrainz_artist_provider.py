@@ -1,7 +1,7 @@
 from providers.entities.artist_news import ArtistNews
 from providers.entities.album import Album
 from providers.entities.object_ids import ObjectIds
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.artist import Artist
 from typing import List, Optional
 import musicbrainzngs
@@ -35,7 +35,7 @@ class MusicbrainzArtistProvider(AbstractArtistProvider):
 
         return artist
 
-    def get_top_songs(self) -> Optional[List[Song]]:
+    def get_top_tracks(self) -> Optional[List[Track]]:
         return None
 
     def get_all_albums(self) -> Optional[List[Album]]:

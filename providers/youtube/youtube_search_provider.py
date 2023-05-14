@@ -4,7 +4,7 @@ from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
-from providers.entities.song import Song
+from providers.entities.track import Track
 from providers.entities.playlist import Playlist
 from typing import List, Tuple
 from ytmusicapi import YTMusic
@@ -16,14 +16,14 @@ class YoutubeSearchProvider(AbstractSearchProvider):
     def __init__(self) -> None:
         self.ytmusic = YTMusic()
 
-    def search(self, query: str) -> Tuple[List[Song], List[Artist], List[Album], List[Genre], List[Playlist]]:
-        songs: List[Song] = self.search_song(query)
+    def search(self, query: str) -> Tuple[List[Track], List[Artist], List[Album], List[Genre], List[Playlist]]:
+        tracks: List[Track] = self.search_track(query)
         artists: List[Artist] = []
         albums: List[Album] = []
         genres: List[Genre] = []
         playlists: List[Playlist] = self.search_playlist(query)
 
-        return (songs, artists, albums, genres, playlists)
+        return (tracks, artists, albums, genres, playlists)
 
     def search_album(self, query: str) -> List[Album]:
 
@@ -47,20 +47,20 @@ class YoutubeSearchProvider(AbstractSearchProvider):
 
         return playlists
 
-    def search_song(self, query: str) -> List[Song]:
-        songs: List[Song] = []
-        for song in self.ytmusic.search(query, filter="songs"):
-            s: Song = Song(
-                song_id=YoutubeId(song["videoId"]),
-                title=song["title"],
+    def search_track(self, query: str) -> List[Track]:
+        tracks: List[Track] = []
+        for track_dict in self.ytmusic.search(query, filter="songs"):
+            track: Track = Track(
+                track_id=YoutubeId(track_dict["videoId"]),
+                title=track_dict["title"],
                 artist=Artist(
-                    artist_id=YoutubeId(song["artists"][0]["id"]),
-                    name=song["artists"][0]["name"]),
-                duration=convert_duration(song["duration"]),
-                external_url="https://youtube.com/watch?v=" + song["videoId"],
+                    artist_id=YoutubeId(track_dict["artists"][0]["id"]),
+                    name=track_dict["artists"][0]["name"]),
+                duration=convert_duration(track_dict["duration"]),
+                external_url="https://youtube.com/watch?v=" + track_dict["videoId"],
             )
-            for thumbnail in song["thumbnails"]:
-                s.pictures_url.append(thumbnail["url"])
-            songs.append(s)
+            for thumbnail in track_dict["thumbnails"]:
+                track.pictures_url.append(thumbnail["url"])
+            tracks.append(track)
 
-        return songs
+        return tracks
