@@ -1,27 +1,25 @@
-from providers.entities.artist_news import ArtistNews
-from providers.entities.object_ids import ObjectIds
-from providers.spotify.spotify_id import SpotifyId
-from utils.config import Config
-from providers.spotify.spotify_utils import get_albums, get_artists, get_tracks
+from typing import List, Optional, cast
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from utils.config import Config
+from providers.entities.artist_news import ArtistNews
+from providers.entities.object_ids import ObjectId
+from providers.spotify.spotify_id import SpotifyId
+from providers.spotify.spotify_utils import get_albums, get_artists, get_tracks
+from providers.spotify.spotify_provider_information import SpotifyProviderInformation
 from providers.entities.album import Album
 from providers.entities.track import Track
 from providers.entities.artist import Artist
-from typing import List, Optional, cast
 from providers.abstract_artist_provider import AbstractArtistProvider
 
 
-class SpotifyArtistProvider(AbstractArtistProvider):
+class SpotifyArtistProvider(AbstractArtistProvider, SpotifyProviderInformation):
 
-    def __init__(self, artist_object_ids: ObjectIds) -> None:
-        super().__init__(artist_object_ids)
+    def __init__(self, object_id: ObjectId, name: str) -> None:
+        super().__init__(object_id, name)
         self.spotify = spotipy.Spotify(
             client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
                                                                 client_secret=Config().get("providers", "spotify", "client_secret")))
-
-    def get_object_ids(self) -> ObjectIds:
-        return self.artist_object_ids
 
     def get_information(self) -> Optional[str]:
         # spotify does not return information about artists (members, biography, ...)
@@ -33,17 +31,16 @@ class SpotifyArtistProvider(AbstractArtistProvider):
 
     def get_similar_artists(self) -> Optional[List[Artist]]:
         artists: dict = cast(
-            dict, self.spotify.artist_related_artists(self.artist_object_ids.get_id(SpotifyId.get_short_name())))
+            dict, self.spotify.artist_related_artists(self.object_id))
         return get_artists(artists)
 
     def get_all_albums(self) -> Optional[List[Album]]:
-        albums: dict = cast(dict, self.spotify.artist_albums(
-            self.artist_object_ids.get_id(SpotifyId.get_short_name())))
+        albums: dict = cast(dict, self.spotify.artist_albums(self.object_id))
         return get_albums(albums)
 
     def get_top_tracks(self) -> Optional[List[Track]]:
         tracks: dict = cast(
-            dict, self.spotify.artist_top_tracks(self.artist_object_ids.get_id(SpotifyId.get_short_name())))
+            dict, self.spotify.artist_top_tracks(self.object_id))
         return get_tracks(tracks)
 
     def get_news(self) -> Optional[List[ArtistNews]]:
@@ -59,8 +56,7 @@ class SpotifyArtistProvider(AbstractArtistProvider):
                         break
         """
         artist: Optional[Artist] = None
-        sp_artist = self.spotify.artist(
-            self.artist_object_ids.get_id(SpotifyId.get_short_name()))
+        sp_artist = self.spotify.artist(self.object_id)
         artist = Artist(SpotifyId(sp_artist.get("id")), sp_artist.get("name"))
         if len(sp_artist.get("images")) > 0:
             artist.pictures_url.append(sp_artist.get("images")[0].get("url"))

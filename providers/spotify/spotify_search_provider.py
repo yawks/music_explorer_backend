@@ -3,6 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from utils.config import Config
 from providers.spotify.spotify_utils import get_albums, get_artists, get_playlists, get_tracks
+from providers.spotify.spotify_provider_information import SpotifyProviderInformation
 from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
 from providers.entities.album import Album
@@ -11,9 +12,10 @@ from providers.entities.track import Track
 from providers.entities.playlist import Playlist
 
 
-class SpotifySearchProvider(AbstractSearchProvider):
+class SpotifySearchProvider(AbstractSearchProvider, SpotifyProviderInformation):
 
     def __init__(self) -> None:
+        super().__init__()
         self.spotify = spotipy.Spotify(
             client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),
                                                                 client_secret=Config().get("providers", "spotify", "client_secret")))

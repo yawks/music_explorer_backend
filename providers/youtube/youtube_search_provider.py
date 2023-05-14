@@ -1,19 +1,20 @@
+from typing import List, Tuple
+from ytmusicapi import YTMusic
 from providers.youtube.youtube_id import YoutubeId
 from providers.youtube.youtube_utils import convert_duration
+from providers.youtube.youtube_provider_information import YoutubeProviderInformation
 from providers.abstract_search_provider import AbstractSearchProvider
 from providers.entities.genre import Genre
 from providers.entities.album import Album
 from providers.entities.artist import Artist
 from providers.entities.track import Track
 from providers.entities.playlist import Playlist
-from typing import List, Tuple
-from ytmusicapi import YTMusic
-from datetime import datetime
 
 
-class YoutubeSearchProvider(AbstractSearchProvider):
+class YoutubeSearchProvider(AbstractSearchProvider, YoutubeProviderInformation):
 
     def __init__(self) -> None:
+        super().__init__()
         self.ytmusic = YTMusic()
 
     def search(self, query: str) -> Tuple[List[Track], List[Artist], List[Album], List[Genre], List[Playlist]]:

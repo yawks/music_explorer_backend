@@ -52,7 +52,7 @@ class GelTrack(Resource):
 
 
 @providers_api.route("/list/<string:provider_type>")
-@providers_api.param("provider_type", "track, album, artist, playlist, search")
+@providers_api.param("provider_type", "'track' or 'album' or 'artist' or 'playlist' or 'search'")
 class GetProviders(Resource):
     def get(self, provider_type: str):
         return ProviderManager().list(provider_type)

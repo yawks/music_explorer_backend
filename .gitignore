@@ -5,3 +5,4 @@ project
 resources/config.yaml
 __pycache__
 =
+.cache

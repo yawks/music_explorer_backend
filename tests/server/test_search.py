@@ -6,7 +6,7 @@ from server.search.search_handler import SearchHandler
 def test_search():
     search: SearchHandler = SearchHandler("led zeppelin")
 
-    result: SearchResult = search.get_results()
+    result: dict = search.get_results()
 
-    if len(result.tracks) == 0:
+    if len(result.get("tracks", [])) == 0:
         raise AssertionError("result must not be empty")

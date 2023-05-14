@@ -1,25 +1,20 @@
-from providers.entities.object_ids import ObjectIds
-from providers.abstract_artist_provider import AbstractArtistProvider
 from typing import List, Optional
 from utils.config import Config
-from .api.api import MusicStoryApi
-from .music_story_id import MusicStoryId
+from providers.entities.object_ids import ObjectId
+from providers.abstract_artist_provider import AbstractArtistProvider
 from providers.entities.artist_news import ArtistNews
 from providers.entities.album import Album
 from providers.entities.track import Track
 from providers.entities.artist import Artist
-from providers.entities.album import Album
+from providers.music_story.music_story_provider_information import MusicStoryProviderInformation
+from .api.api import MusicStoryApi
 
+class MusicStoryArtistProvider(AbstractArtistProvider, MusicStoryProviderInformation):
 
-class MusicStoryArtistProvider(AbstractArtistProvider):
-
-    def __init__(self, artist_object_ids: ObjectIds) -> None:
-        super().__init__(artist_object_ids)
+    def __init__(self, object_id: ObjectId, name: str) -> None:
+        super().__init__(object_id, name)
         self.music_story = MusicStoryApi(Config().get("providers", "music_story", "consumer_key"),
                                          Config().get("providers", "music_story", "consumer_secret"))
-
-    def get_object_ids(self) -> ObjectIds:
-        return self.artist_object_ids
 
     def get_information(self) -> Optional[str]:
         return None
@@ -37,26 +32,23 @@ class MusicStoryArtistProvider(AbstractArtistProvider):
         return None
 
     def get_news(self) -> Optional[List[ArtistNews]]:
-        news: Optional[List[ArtistNews]] = None
-        """
-
-        t ry:
-            if self.artist_id > -1:
-                _ = self.music_story.get(
-                    "news", id=self.artist_id, lang=Config().get("lang")[0])
-                # a a = "2"
+        news: Optional[List[ArtistNews]] = []
+        
+        try:
+            result = self.music_story.get(
+                "news", id=self.object_id, lang=Config().get_languages()[0])
+            #MusicStoryObject
         except Exception as e:
             print(str(e))
             #TODO : log
-        """
-
+        
         return news
 
     def get_artist(self) -> Optional[Album]:
         try:
             self.music_story.connect()
             _ = self.music_story.get(
-                "news", id=self.artist_object_ids.get_id(MusicStoryId), lang=Config().get("lang")[0])
+                "news", id=self.object_id, lang=Config().get_languages()[0])
 
             """
             _ = s elf.music_story.search(

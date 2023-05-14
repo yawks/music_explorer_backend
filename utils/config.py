@@ -29,3 +29,16 @@ class Config():
             value = cur
 
         return value
+
+    def get_languages(self):
+        """Get languages defined in the configuration file, ordered by priority
+
+        Returns:
+            _type_: list of language codes (ISO 639-1)
+        """
+        languages = ["en"]
+        config_languages = self.get("lang")
+        if isinstance(config_languages, list):
+            languages = config_languages
+
+        return languages

@@ -1,17 +1,19 @@
+from typing import List, cast
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 from utils.config import Config
 from providers.entities.playlist import Playlist
 from providers.spotify.spotify_id import SpotifyId
 from providers.spotify.spotify_utils import get_tracks
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from providers.entities.track import Track
 from providers.abstract_playlist_provider import AbstractPlaylistProvider
-from typing import List, cast
+from providers.spotify.spotify_provider_information import SpotifyProviderInformation
 
 
-class SpotifyPlaylistProvider(AbstractPlaylistProvider):
+class SpotifyPlaylistProvider(AbstractPlaylistProvider, SpotifyProviderInformation):
 
     def __init__(self, playlist: Playlist) -> None:
+        super().__init__()
         self.playlist: Playlist = playlist
         self.spotify = spotipy.Spotify(
             client_credentials_manager=SpotifyClientCredentials(client_id=Config().get("providers", "spotify", "client_id"),

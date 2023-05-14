@@ -1,16 +1,18 @@
-from typing import List, Optional
+from typing import Optional
 from ytmusicapi import YTMusic
 from providers.entities.object_ids import ObjectIds
 from providers.youtube.youtube_id import YoutubeId
 from providers.youtube.youtube_utils import convert_duration
+from providers.youtube.youtube_provider_information import YoutubeProviderInformation
 from providers.entities.artist import Artist
 from providers.entities.track import Track
 from providers.abstract_track_provider import AbstractTrackProvider
 
 
-class YoutubeTrackProvider(AbstractTrackProvider):
+class YoutubeTrackProvider(AbstractTrackProvider, YoutubeProviderInformation):
 
     def __init__(self) -> None:
+        super().__init__()
         self.ytmusic = YTMusic()
 
     def get_track(self, object_ids: ObjectIds) -> Optional[Track]:

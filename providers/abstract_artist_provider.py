@@ -1,20 +1,23 @@
 from abc import ABC, abstractmethod
-from providers.entities.object_ids import ObjectIds
+from typing import List, Optional
+from providers.entities.object_ids import ObjectId
 from providers.entities.artist_news import ArtistNews
 from providers.entities.album import Album
 from providers.entities.track import Track
 from providers.entities.artist import Artist
-from typing import List, Optional
 
 
 class AbstractArtistProvider(ABC):
 
-    def __init__(self, artist_object_ids: ObjectIds) -> None:
-        self.artist_object_ids = artist_object_ids
+    def __init__(self, object_id: ObjectId, name: str) -> None:
+        self.object_id = object_id
+        self.name: str = name
 
-    @abstractmethod
-    def get_object_ids(self) -> ObjectIds:
-        pass
+    def get_object_id(self) -> ObjectId:
+        return self.object_id
+    
+    def get_name(self) -> str:
+        return self.name
 
     @abstractmethod
     def get_information(self) -> Optional[str]:

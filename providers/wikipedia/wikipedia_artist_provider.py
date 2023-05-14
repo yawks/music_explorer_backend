@@ -1,34 +1,33 @@
-from providers.entities import artist
-from providers.entities.artist_news import ArtistNews
+from typing import List, Optional
+import wikipedia
+from utils.config import Config
 from wikipedia.exceptions import PageError
+from providers.entities.artist_news import ArtistNews
 from providers.entities.album import Album
-from providers.entities.object_ids import ObjectIds
+from providers.entities.object_ids import ObjectId
 from providers.entities.track import Track
 from providers.entities.artist import Artist
-from typing import List, Optional
 from providers.abstract_artist_provider import AbstractArtistProvider
-import wikipedia
 from providers.wikipedia.wikipedia_id import WikipediaId
+from providers.wikipedia.wikipedia_provider_information import WikipediaProviderInformation
 
 
-class WikipediaArtistProvider(AbstractArtistProvider):
+class WikipediaArtistProvider(AbstractArtistProvider, WikipediaProviderInformation):
 
-    def __init__(self, artist_object_ids: ObjectIds, language: str = "en") -> None:
-        super().__init__(artist_object_ids)
-        wikipedia.set_lang(language)
-
-    def get_object_ids(self) -> ObjectIds:
-        return self.artist_object_ids
+    def __init__(self, object_id: ObjectId, name: str) -> None:
+        super().__init__(object_id, name)
+        wikipedia.set_lang(Config().get_languages()[0])
 
     def get_information(self) -> Optional[str]:
         information: Optional[str] = None
-        try:
-            page = wikipedia.page(self.artist_object_ids.obj_query_name)
-            information = page.content
-        except PageError:
-            # TODO search instead?
-            pass
-
+        if self.name != "":
+            try:
+                page = wikipedia.page(self.name)
+                information = page.content
+            except PageError:
+                # TODO search instead?
+                pass
+        
         return information
 
     def get_all_albums(self) -> Optional[List[Album]]:
@@ -48,11 +47,10 @@ class WikipediaArtistProvider(AbstractArtistProvider):
 
     def get_artist(self) -> Optional[Artist]:
         artist: Optional[Artist] = None
-        if self.artist_object_ids.obj_query_name != "":
-            artist = Artist(WikipediaId(
-                self.artist_object_ids.obj_query_name), self.artist_object_ids.obj_query_name)
+        if self.name != "":
+            artist = Artist(WikipediaId(self.name), self.name)
 
-            page = wikipedia.page(self.artist_object_ids.obj_query_name)
+            page = wikipedia.page(self.name)
 
             for image in page.images:
                 artist.pictures_url.append(image)

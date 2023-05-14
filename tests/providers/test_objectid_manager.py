@@ -12,7 +12,7 @@ def test_dumps():
 def test_dumps_list():
     object_ids:ObjectIds = ObjectIds(SpotifyId("1234"))
     object_ids.add_provider_object_id(YoutubeId("ABCD"))
-    assert ObjectIdManager().dumps_list(object_ids) == "eyJzcCI6ICIxMjM0IiwgInl0IjogIkFCQ0QifQ=="
+    assert ObjectIdManager().dumps_list(object_ids) == "eyJvYmpfcXVlcnlfbmFtZSI6ICIiLCAic3AiOiAiMTIzNCIsICJ5dCI6ICJBQkNEIn0="
 
 
 def test_loads():

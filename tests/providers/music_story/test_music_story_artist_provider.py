@@ -6,10 +6,8 @@ TEST_ARTIST_NAME = "led zeppelin"
 
 
 def test_get_news():
-    music_story_artist_provider: MusicStoryArtistProvider = MusicStoryArtistProvider(
-        artist=Artist(
-            artist_id=MusicStoryId("dummy"),
-            name=TEST_ARTIST_NAME))
+    music_story_artist_provider: MusicStoryArtistProvider = MusicStoryArtistProvider(object_id=MusicStoryId(TEST_ARTIST_NAME),
+                                                                                     name=TEST_ARTIST_NAME)
 
     news = music_story_artist_provider.get_news()
 

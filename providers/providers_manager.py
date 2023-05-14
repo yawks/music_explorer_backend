@@ -85,9 +85,10 @@ class ProviderManager():
 
         return providers
 
-    def list(self, provider_type: str) -> dict:
-        result = {}
-        if provider_type == "track":
-            result = self._get_providers_implementing("AbstractTrackProvider")
+    def list(self, provider_type: str) -> list:
+        result = []
+        providers_list = self._get_providers_implementing("Abstract%sProvider" % provider_type.capitalize())
+        for provider in providers_list:
+            result.append(provider().get_provider_information())
 
         return result
